@@ -40,7 +40,7 @@ you can also pass *true* after the lng_to value if you also want the route info.
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/searates.
+Bug reports and pull requests are welcome on GitHub at https://github.com/andre-lgf/searates.
 
 ## License
 
