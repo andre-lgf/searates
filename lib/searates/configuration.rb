@@ -1,9 +1,9 @@
 module Searates
-  class Configuration
+  class Configuration    
     attr_accessor :api_key
 
     def initialize
-      @api_key = nil
+      @api_key ||= nil
     end
     
     def api_key

@@ -11,4 +11,10 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+  
+  config.before(:all) do
+    Searates.configure do |config|
+      config.api_key = ENV['SEARATES_API_KEY']
+    end
+  end
 end

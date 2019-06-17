@@ -1,8 +1,9 @@
 require "searates/version"
 require 'searates/configuration'
 require 'searates/errors'
+require 'searates/api'
 
-module Searates  
+module Searates
   class << self
     attr_accessor :configuration
   end
