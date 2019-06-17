@@ -29,14 +29,14 @@ Searates.configure do |config|
 end
 ```
 
-### Logistics Explorer
+### Logistics Explorer - FCL Rates
 
 To make requests, simple call the API you want and store the return in a variable. e.g.
 ```ruby
-response = Searates::API::LogisticsExplorer(latfrom, lngfrom, latto, lngto)
+response = Searates::API::LogisticsExplorer.get_fcl_rates(lat_from, lng_from, lat_to, lng_to)
 ```
 
-you can also pass *true* after the lngto value if you also want the route info.
+you can also pass *true* after the lng_to value if you also want the route info.
 
 ## Contributing
 
