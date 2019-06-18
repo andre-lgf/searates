@@ -10,22 +10,126 @@ RSpec.describe Searates do
       end
       
       context "logistics explorer API" do
-        context "with valid coordinates" do
-          before(:each) do
-            @lat_from = -30.0346
-            @lng_from = -51.2176
-            @lat_to = 31.23054
-            @lng_to = 121.4737
+        context "FLC rates" do
+          context "with invalid parameters" do
+            it "should raise error" do
+              expect{ Searates::API::LogisticsExplorer.get_fcl_rates(@lat_from, nil, @lat_to, @lng_to) }.to raise_error(Searates::Errors::API::MissingParameters)
+            end
           end
           
-          it "should return fcl rates" do
-            response = Searates::API::LogisticsExplorer.get_fcl_rates(@lat_from, @lng_from, @lat_to, @lng_to)
-            expect(response['rates'].length).to be > 0
+          context "with valid parameters" do          
+            it "should return fcl rates" do
+              response = Searates::API::LogisticsExplorer.get_fcl_rates(@lat_from, @lng_from, @lat_to, @lng_to)
+              expect(response['rates'].size).to be > 0
+            end
+          
+            it "should return fcl rates with route info" do
+              response = Searates::API::LogisticsExplorer.get_fcl_rates(@lat_from, @lng_from, @lat_to, @lng_to, true)
+              expect(response['route'].size).to be > 0
+            end
+          end
+        end
+        
+        context "LCL rates" do
+          context "with valid parameters" do            
+            it "should return lcl rates" do
+              response = Searates::API::LogisticsExplorer.get_lcl_rates(@lat_from, @lng_from, @lat_to, @lng_to, @weight, @volume)
+              expect(response['rates']['lcl'].size).to be > 0
+            end
           end
           
-          it "should return fcl rates with route info" do
-            response = Searates::API::LogisticsExplorer.get_fcl_rates(@lat_from, @lng_from, @lat_to, @lng_to, true)
-            expect(response['route'].size).to be > 0
+          context "with invalid parameters" do          
+            it "should raise error" do
+              expect{ Searates::API::LogisticsExplorer.get_lcl_rates(@lat_from, @lng_from, @lat_to, nil, @weight, @volume) }.to raise_error(Searates::Errors::API::MissingParameters)
+            end
+          end
+        end
+        
+        context "Sea route" do
+          context "with valid parameters" do 
+            it "should return sea route" do
+              response = Searates::API::LogisticsExplorer.get_sea_route(@lat_from, @lng_from, @lat_to, @lng_to)
+              expect(response['route'].size).to be > 1
+            end
+          end
+          
+          context "with invalid parameters" do
+            it "should raise error" do
+              expect{ Searates::API::LogisticsExplorer.get_sea_route(nil, @lng_from, @lat_to, @lng_to) }.to raise_error(Searates::Errors::API::MissingParameters)
+            end
+          end
+        end
+        
+        context "Air rates" do
+          context "with valid parameters" do
+            it "should return air rates" do
+              response = Searates::API::LogisticsExplorer.get_air_rates(@lat_from, @lng_from, @lat_to, @lng_to, @weight)
+              expect(response['rates']['air'].size).to be > 0
+            end
+          end
+          
+          context "with invalid parameters" do            
+            it "should raise error" do
+              expect{ Searates::API::LogisticsExplorer.get_air_rates(@lat_from, @lng_from, @lat_to, nil, @weight) }.to raise_error(Searates::Errors::API::MissingParameters)
+            end
+          end
+        end
+        
+        context "Rail rates" do
+          context "with valid parameters" do
+            it "should return rail rates" do
+              response = Searates::API::LogisticsExplorer.get_rail_rates(@lat_from, @lng_from, @lat_to, @lng_to)
+              expect(response['rates'].size).to be > 0
+            end
+          end
+          
+          context "with invalid parameters" do            
+            it "should raise error" do
+              expect{ Searates::API::LogisticsExplorer.get_rail_rates(@lat_from, @lng_from, nil, @lng_to) }.to raise_error(Searates::Errors::API::MissingParameters)
+            end
+          end
+        end
+        
+        context "Road rates" do
+          context "with valid parameters" do
+            context "without optional parameters" do
+              it "should return road rates" do
+                response = Searates::API::LogisticsExplorer.get_road_rates(@lat_from, @lng_from, @lat_to, @lng_to, @weight, @volume)
+                expect(response['rates'].size).to be > 0
+              end
+            end
+            
+            context "determining the type" do
+              it "should return road rates" do
+                response = Searates::API::LogisticsExplorer.get_road_rates(@lat_from, @lng_from, @lat_to, @lng_to, @weight, @volume, 'FCL')
+                expect(response['rates'].size).to be > 0
+              end
+            end
+            
+            context "determining the size of container" do
+              it "should return road rates" do
+                response = Searates::API::LogisticsExplorer.get_road_rates(@lat_from, @lng_from, @lat_to, @lng_to, @weight, @volume, 'CONTAINER', '40st')
+                expect(response['rates'].size).to be > 0
+              end
+            end
+          end
+          
+          context "with invalid parameters" do
+            it "should raise error" do
+              expect{ Searates::API::LogisticsExplorer.get_road_rates(@lat_from, @lng_from, @lat_to, @lng_to, @weight, nil) }.to raise_error(Searates::Errors::API::MissingParameters)
+            end
+            
+            context "with invalid type" do         
+              it "should raise error" do
+                expect{ Searates::API::LogisticsExplorer.get_road_rates(@lat_from, @lng_from, @lat_to, @lng_to, @weight, @volume, 'ABC', '40ref') }.to raise_error(Searates::Errors::API::InvalidParameterValue)
+              end
+            end
+            
+            context "with invalid size" do         
+              it "should raise error" do
+                expect{ Searates::API::LogisticsExplorer.get_road_rates(@lat_from, @lng_from, @lat_to, @lng_to, @weight, @volume, 'FCL', '40') }.to raise_error(Searates::Errors::API::InvalidParameterValue)
+              end
+            end
           end
         end
       end

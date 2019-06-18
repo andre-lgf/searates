@@ -20,6 +20,11 @@ Or install it yourself as:
 
 ## Usage
 
+Run the Generator:
+
+    $ rails g searates:install
+
+
 Place your API Key as an environment variable at your server or replace the ENV value in the initializer `initializers/searates.rb`
 
 ```ruby
