@@ -34,7 +34,7 @@ module Searates
       
       def self.get_road_rates(lat_from, long_from, lat_to, long_to, weight, volume, type='CONTAINER', container='20st')
         [lat_from, long_from, lat_to, long_to, weight, volume, type, container].each{|param| raise Searates::Errors::API::MissingParameters, "Missing parameter: #{param}" unless param}
-        request_url = "#{BASE_URL}air?apiKey=#{Searates.configuration.api_key}&lat_from=#{lat_from}&lng_from=#{long_from}&lat_to=#{lat_to}&lng_to=#{long_to}&weight=#{weight}&volume=#{volume}"
+        request_url = "#{BASE_URL}road?apiKey=#{Searates.configuration.api_key}&lat_from=#{lat_from}&lng_from=#{long_from}&lat_to=#{lat_to}&lng_to=#{long_to}&weight=#{weight}&volume=#{volume}"
         if type
           raise Searates::Errors::API::InvalidParameterValue unless ['FCL', 'LCL', 'CONTAINER'].include? type.upcase
           request_url += "&type=#{type.upcase}"
